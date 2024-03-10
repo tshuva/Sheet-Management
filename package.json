@@ -1,0 +1,17 @@
+{
+  "name": "sheet-management",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run  --inspect --watch src/index.ts"
+  },
+  "dependencies": {
+    "elysia": "latest",
+    "xlsx-populate": "^1.21.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git"
+  },
+  "module": "src/index.js"
+}

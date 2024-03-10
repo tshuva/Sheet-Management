@@ -36,7 +36,7 @@ The application provides three REST API endpoints for managing your Excel sheets
         - `value`: The new cell value.
         - **`row` (starting from 2):** The row number of the cell to modify (**note: starts from 2, for the second line**).
         - `column`: The column letter of the cell to modify.
-3. **GET /sheet/:id
+3. **GET /sheet/:id**
     - Retrieves an existing sheet for download. Provide the sheet ID (`id`) in the URL path.
 
 **Additional Notes:**

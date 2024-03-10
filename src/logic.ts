@@ -11,12 +11,12 @@ export const DATA_VALIDATION_MAP = {
   }
 } as const;
 
-type dataValidationKeys = keyof typeof DATA_VALIDATION_MAP;
-
+type DataValidationKeys = keyof typeof DATA_VALIDATION_MAP;
+interface ValidationCell { type: string, formula1: string }
 const LOOPUP_REGEX = /^lookup\('[A-Z]\d+'\)$/i;
 
 // Extract the types from the schemeV array=
-const transfromTypeToDataValidtion = (type: dataValidationKeys) => DATA_VALIDATION_MAP[type] as any
+const transfromTypeToDataValidtion = (type: DataValidationKeys) => DATA_VALIDATION_MAP[type] as any
 
 const LOOKUP = (address: string) => (ws: xlsxPopulate.Sheet, visitedCells = new Set()) => {
   const currentCell = ws.cell(address);
@@ -27,7 +27,7 @@ const LOOKUP = (address: string) => (ws: xlsxPopulate.Sheet, visitedCells = new 
     throw "Circular reference detected!";
   }
   visitedCells.add(address);
-  return eval((currentCell.dataValidation() as any).formula1.toUpperCase())(ws, visitedCells)
+  return eval((currentCell.dataValidation() as ValidationCell).formula1.toUpperCase())(ws, visitedCells)
 }
 
 const handleLookup = (lookupString: string, ws: xlsxPopulate.Sheet, cell: xlsxPopulate.Cell) => {
@@ -47,7 +47,7 @@ export const createSheet = async (body: PostBody, store: Store) => {
   const ws = wb.sheet(0)
   body.columns.map((col, i) => {
     ws.cell(1, i + 1).value(col.name)
-    ws.cell(1, i + 1).dataValidation(transfromTypeToDataValidtion(col.type as dataValidationKeys))
+    ws.cell(1, i + 1).dataValidation(transfromTypeToDataValidtion(col.type as DataValidationKeys))
   })
   return await wb.toFileAsync(`public/${sheetID}.xlsx`)
 
@@ -58,7 +58,7 @@ export const setCell = async (id: string, body: PatchBody) => {
   const ws = wb.sheet(0)
 
   const cell = ws.cell(`${body.column}${body.row}`)
-  const validationCell = ws.cell(`${body.column}1`).dataValidation() as { type: string, formula1: string }
+  const validationCell = ws.cell(`${body.column}1`).dataValidation() as ValidationCell
 
   const cellValue = (body.value.toUpperCase && (LOOPUP_REGEX.test(body.value.toUpperCase()))) ? handleLookup(body.value, ws, cell) : body.value
 

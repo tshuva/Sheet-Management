@@ -1,4 +1,4 @@
-# Excel Sheet Management App with Data Validation and Lookups
+# Sheet Management App with Data Validation and Lookups
 
 This Bun web server provides a REST API for managing Excel sheets with robust data validation and lookup capabilities. It ensures data consistency and facilitates dynamic calculations within your spreadsheets.
 
@@ -31,19 +31,10 @@ The application provides three REST API endpoints for managing your Excel sheets
 
 1. **POST /sheet:**
     - Creates a new sheet. Provide a JSON body with an array of columns (name: string, type: string specifying data type).
-2. . **PATCH /sheet/:id:**
+2. **PATCH /sheet/:id:**
     - Modifies a cell value in an existing sheet. Provide sheet ID (`id`) in the URL path and a JSON body containing:
         - `value`: The new cell value.
         - **`row` (starting from 2):** The row number of the cell to modify (**note: starts from 2, for the second line**).
         - `column`: The column letter of the cell to modify.
 3. **GET /sheet/:id**
     - Retrieves an existing sheet for download. Provide the sheet ID (`id`) in the URL path.
-
-**Additional Notes:**
-
-- Consider expanding Dockerfile comments.
-- Uncomment test and build lines if applicable.
-- Explore environment variables for configuration.
-- Document data validation rules and lookup syntax.
-
-This comprehensive README.md guides you in setting up and using your Excel Sheet Management App!

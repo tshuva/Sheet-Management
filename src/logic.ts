@@ -12,12 +12,11 @@ export const DATA_VALIDATION_MAP = {
 } as const;
 
 type DataValidationKeys = keyof typeof DATA_VALIDATION_MAP;
-interface ValidationCell { type: string, formula1: string }
-const LOOPUP_REGEX = /^lookup\('[A-Z]\d+'\)$/i;
 
-// Extract the types from the schemeV array=
 const transfromTypeToDataValidtion = (type: DataValidationKeys) => DATA_VALIDATION_MAP[type] as any
 
+interface ValidationCell { type: string, formula1: string }
+const LOOPUP_REGEX = /^lookup\('[A-Z]\d+'\)$/i;
 const LOOKUP = (address: string) => (ws: xlsxPopulate.Sheet, visitedCells = new Set()) => {
   const currentCell = ws.cell(address);
   if (!currentCell.dataValidation()) {
@@ -47,7 +46,7 @@ export const createSheet = async (body: PostBody, store: Store) => {
   const ws = wb.sheet(0)
   body.columns.map((col, i) => {
     ws.cell(1, i + 1).value(col.name)
-    ws.cell(1, i + 1).dataValidation(transfromTypeToDataValidtion(col.type as DataValidationKeys))
+    ws.cell(1, i + 1).dataValidation(DATA_VALIDATION_MAP[col.type as DataValidationKeys])
   })
   return await wb.toFileAsync(`public/${sheetID}.xlsx`)
 

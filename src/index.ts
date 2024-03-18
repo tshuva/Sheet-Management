@@ -19,13 +19,14 @@ export interface Store {
 }
 
 
-const app = new Elysia()
+export const app = new Elysia()
   .use(staticPlugin())
   .state('currid', 1)
   .use(cors())
   .get("/sheet/:id", ({ params: { id } }) => Bun.file(`public/${id}.xlsx`))
   .post("/sheet"
-    , async ({ body, store }) => await createSheet(body, store)
+    , async ({ body, store }) =>
+      await createSheet(body, store)
     , {
       body: t.Object({
         columns: t.Array(t.Object({
@@ -36,7 +37,8 @@ const app = new Elysia()
     })
 
   .patch("sheet/:id"
-    , async ({ params: { id }, body }) => await setCell(id, body)
+    , async ({ params: { id }, body }) =>
+      await setCell(id, body)
     , { body: t.Object({ value: t.Any(), row: t.Integer({}), column: t.String({ maxLength: 3, minLength: 1 }) }) }
   )
   .listen(3000);
